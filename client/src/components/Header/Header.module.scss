@@ -1,0 +1,61 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 80px;
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.StyledRizLogoWrapper {
+  width: 112px;
+  height: 40px;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: auto;
+}
+
+.cityName {
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+}
+
+.name {
+  font-size: 1.2rem;
+  margin: 4px 0 0 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #555;
+}
+
+.navbar {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Адаптив для узких экранов */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+  }
+  .titleWrapper {
+    margin: 0 0 0.8rem 0;
+  }
+  .navbar {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

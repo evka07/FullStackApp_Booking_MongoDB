@@ -4,21 +4,24 @@ const path = require('node:path');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
-const connectDB = require('./config/db'); // <- импорт подключения к БД
+const connectDB = require('./config/db');
 
 dotenv.config();
 
-connectDB(); // подключаемся к базе
+connectDB();
 
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000',  // фронтенд обычно на 3000
     credentials: true,
 }));
+
 app.use(express.json());
 
+app.use('/api/events', eventRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
 
@@ -37,7 +40,7 @@ app.get('/', (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
