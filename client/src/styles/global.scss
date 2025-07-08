@@ -1,0 +1,95 @@
+/* ===== Global Reset & Base Styles ===== */
+
+/* Reset margins, paddings, and borders */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+/* Remove focus outlines */
+:focus,
+:active {
+  outline: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+/* Ensure semantic elements behave as blocks */
+nav,
+footer,
+header,
+aside {
+  display: block;
+}
+
+/* Full height and vertical scroll */
+html,
+body {
+  height: 100%;
+  min-height: 100vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif; /* Optional default font */
+}
+
+/* Inherit font in form elements */
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+/* Clear buttons and inputs */
+input::-ms-clear {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+/* Remove link underlines */
+a,
+a:visited {
+  text-decoration: none;
+  color: inherit; /* Optional: inherit text color */
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* List cleanup */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Remove default image spacing (optional) */
+/* img {
+  vertical-align: top;
+} */
+
+/* Headings base reset */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: 400;
+}

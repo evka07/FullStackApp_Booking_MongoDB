@@ -1,0 +1,60 @@
+.videoBanner {
+  height: 37.5rem;
+  overflow: hidden;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.eventsGrid {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  background-color: #f9f9f9;
+}
+
+.eventCard {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #222;
+  }
+
+  p {
+    margin: 0.25rem 0;
+    color: #555;
+    font-size: 0.95rem;
+  }
+
+  strong {
+    color: #000;
+    font-weight: 600;
+  }
+
+  button {
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    background-color: #0066ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #004fd6;
+    }
+  }
+}
