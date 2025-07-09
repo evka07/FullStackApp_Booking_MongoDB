@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import styles from './RegisterModal.module.scss';
 
-export default function RegisterModal({ isOpen, onClose, navigate }) {
+export default function RegisterModal({ isOpen, onClose, navigate, onSwitchToLogin }) {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -25,7 +25,6 @@ export default function RegisterModal({ isOpen, onClose, navigate }) {
         try {
             const response = await axios.post('/api/users/register', formData);
 
-            // ✅ Сохраняем токен в localStorage
             localStorage.setItem('token', response.data.token);
 
             console.log('Registration successful:', response.data);
@@ -74,6 +73,26 @@ export default function RegisterModal({ isOpen, onClose, navigate }) {
                     </button>
                     {error && <p className={styles.errorMessage}>{error}</p>}
                 </form>
+                <p style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
+                    Already have an account?{' '}
+                    <button
+                        onClick={() => {
+                            onClose();
+                            onSwitchToLogin();
+                        }}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#0066ff',
+                            cursor: 'pointer',
+                            textDecoration: 'underline',
+                            padding: 0,
+                            fontSize: '0.9rem',
+                        }}
+                    >
+                        Log in here
+                    </button>
+                </p>
             </div>
         </div>
     );

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import styles from './LoginModal.module.scss';
 
-export default function LoginModal({ isOpen, onClose, navigate }) {
+export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegister }) {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -65,6 +65,26 @@ export default function LoginModal({ isOpen, onClose, navigate }) {
                     </button>
                     {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
                 </form>
+                <p style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
+                    Don't have an account?{' '}
+                    <button
+                        onClick={() => {
+                            onClose();
+                            onSwitchToRegister();
+                        }}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#0066ff',
+                            cursor: 'pointer',
+                            textDecoration: 'underline',
+                            padding: 0,
+                            fontSize: '0.9rem',
+                        }}
+                    >
+                        Register here
+                    </button>
+                </p>
             </div>
         </div>
     );
