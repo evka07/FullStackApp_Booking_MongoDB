@@ -1,0 +1,41 @@
+.footer {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+  justify-content: space-around;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 0.8rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: #ccc;
+    transition: background-color 0.3s, color 0.3s;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background-color: #444;
+      color: #fff;
+    }
+  }
+}

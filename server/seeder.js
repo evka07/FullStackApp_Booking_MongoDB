@@ -11,15 +11,47 @@ const events = [
         time: '19:00',
         venue: 'Tauron Arena Kraków',
         description: 'World Tour 2025',
-        price: 120,
+        price: {
+            amount: 120,
+            label: 'From 120 PLN',
+            currency: 'PLN',
+        },
     },
     {
-        title: 'Hamlet — Teatr Wielki',
+        title: 'Hamlet — Teatr Słowackiego',
         date: new Date('2025-08-25'),
         time: '18:00',
-        venue: 'Teatr Wielki, Warsaw',
+        venue: 'Teatr Słowackiego, Kraków',
         description: 'A classical play in a modern interpretation',
-        price: 90,
+        price: {
+            amount: 90,
+            label: 'From 90 PLN',
+            currency: 'PLN',
+        },
+    },
+    {
+        title: 'Scorpions',
+        date: new Date('2025-10-10'),
+        time: '20:00',
+        venue: 'Tauron Arena Kraków',
+        description: 'World Tour, The End Of The Era',
+        price: {
+            amount: 200,
+            label: 'From 200 PLN',
+            currency: 'PLN',
+        },
+    },
+    {
+        title: 'Wawel Castle & Cathedral Guided Tour',
+        date: new Date('2025-09-01'),
+        time: '10:00',
+        venue: 'Wawel Castle, Kraków',
+        description: 'Explore the Wawel Castle & Cathedral on a guided tour, steeped in history and brimming with artistic wonders',
+        price: {
+            amount: 90,
+            label: 'From 90 PLN',
+            currency: 'PLN',
+        },
     },
 ];
 

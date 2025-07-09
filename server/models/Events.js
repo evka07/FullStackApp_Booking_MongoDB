@@ -6,8 +6,12 @@ const eventSchema = new mongoose.Schema({
     time: String,
     venue: String,
     description: String,
-    price: Number,
-})
+    price: {
+        amount: Number,
+        label: String,
+        currency: String
+    }
+});
 
 const Event = mongoose.model("Event", eventSchema);
 

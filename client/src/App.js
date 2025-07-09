@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import HomePage from "./pages/HomePage/HomePage";
 import Header from './components/Header/Header';
+import Footer from "./components/Footer/Footer";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/profile" element={<Profile />} />
             </Routes>
+            <Footer />
         </Router>
     );
 }
