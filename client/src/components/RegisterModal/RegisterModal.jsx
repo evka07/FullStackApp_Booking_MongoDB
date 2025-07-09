@@ -25,12 +25,17 @@ export default function RegisterModal({ isOpen, onClose, navigate, onSwitchToLog
         try {
             const response = await axios.post('/api/users/register', formData);
 
+            // Сохраняем весь объект пользователя
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data));
 
             console.log('Registration successful:', response.data);
+
             setLoading(false);
             onClose();
-            navigate('/profile');
+
+            const selectedEventId = localStorage.getItem('selectedEventId');
+            navigate('/profile', { state: { eventId: selectedEventId } });
         } catch (err) {
             setLoading(false);
             setError(err.response?.data?.message || 'Registration failed');

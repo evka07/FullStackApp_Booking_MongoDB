@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.jsx';
 import RegisterModal from '../RegisterModal/RegisterModal.jsx';
-import LoginModal from '../LoginModal/LoginModal.jsx'; // предполагаем, что есть такой компонент
+import LoginModal from '../LoginModal/LoginModal.jsx';
 import styles from './Header.module.scss';
 
 const Header = () => {
@@ -15,6 +15,17 @@ const Header = () => {
 
     const openLoginModal = () => setIsLoginOpen(true);
     const closeLoginModal = () => setIsLoginOpen(false);
+
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userName = user?.name;
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('selectedEventId');
+        navigate('/');
+    };
 
     return (
         <>
@@ -33,21 +44,30 @@ const Header = () => {
                 </div>
 
                 <nav className={styles.navbar}>
-                    <Navbar onRegisterClick={openRegisterModal} onLoginClick={openLoginModal} />
+                    <Navbar
+                        onRegisterClick={openRegisterModal}
+                        onLoginClick={openLoginModal}
+                        isLoggedIn={!!token}
+                        userName={userName}
+                        onLogout={handleLogout}
+                    />
                 </nav>
             </header>
 
-            <RegisterModal
-                isOpen={isRegisterOpen}
-                onClose={closeRegisterModal}
-                navigate={navigate}
-            />
-
-            <LoginModal
-                isOpen={isLoginOpen}
-                onClose={closeLoginModal}
-                navigate={navigate}
-            />
+            {!token && (
+                <>
+                    <RegisterModal
+                        isOpen={isRegisterOpen}
+                        onClose={closeRegisterModal}
+                        navigate={navigate}
+                    />
+                    <LoginModal
+                        isOpen={isLoginOpen}
+                        onClose={closeLoginModal}
+                        navigate={navigate}
+                    />
+                </>
+            )}
         </>
     );
 };

@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const bookingSchema = new mongoose.Schema ({
-
-    row: {
-        type: Number,
-        required: true,
-    },
+const bookingSchema = new mongoose.Schema(
+    {
+        row: {
+            type: Number,
+            required: true,
+        },
         seat: {
             type: Number,
             required: true,
@@ -18,12 +18,18 @@ const bookingSchema = new mongoose.Schema ({
         date: {
             type: Date,
             required: true,
-        }
-}, {
-    timestamps: true,
+        },
+        event: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Event',
+            required: true,
+        },
+    },
+    {
+        timestamps: true,
     }
-)
+);
 
-const Booking = mongoose.model('Booking', bookingSchema)
+const Booking = mongoose.model('Booking', bookingSchema);
 
 module.exports = Booking;

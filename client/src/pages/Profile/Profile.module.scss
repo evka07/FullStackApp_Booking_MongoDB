@@ -1,28 +1,188 @@
 .main {
-  height: 100vh;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f9fc;
+  min-height: 100vh;
 }
 
 .profileContainer {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-  h2 {
-    margin-bottom: 1rem;
-    color: #222;
-  }
-
-  p {
-    font-size: 1.1rem;
-    margin: 0.5rem 0;
-  }
-}
-
-.error {
-  color: red;
+  max-width: 960px;
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin-top: 2rem;
 }
+
+.welcomeHeader {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.userEmail {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.logoutButton {
+  margin-bottom: 2rem;
+  padding: 0.5rem 1.2rem;
+  background-color: #6cb4ee;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.logoutButton:hover {
+  background-color: #009cde;
+}
+
+label[for="booking-date"] {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  display: block;
+  margin: 0 auto 0.5rem;
+}
+
+#booking-date {
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 1.5rem;
+  transition: border 0.3s ease;
+}
+
+#booking-date:focus {
+  border-color: #0066ff;
+  outline: none;
+}
+
+.seatingSection {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.stage {
+  margin: 1rem auto 1.5rem;
+  width: 60%;
+  padding: 0.8rem;
+  background-color: #333;
+  color: white;
+  font-weight: bold;
+  border-radius: 12px;
+  user-select: none;
+  text-align: center;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.selectedSeatsText {
+  margin-top: 1.5rem;
+  font-weight: 600;
+  color: #0066ff;
+  font-size: 1.05rem;
+}
+
+.buyButton {
+  margin-top: 12px;
+  padding: 0.7rem 1.5rem;
+  background-color: #007b00;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.buyButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.buyButton:hover:not(:disabled) {
+  background-color: #005c00;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .profileContainer {
+    padding: 1rem;
+  }
+
+  .welcomeHeader {
+    font-size: 1.6rem;
+  }
+
+  .stage {
+    width: 90%;
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .buyButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .selectedSeatsText {
+    font-size: 0.95rem;
+  }
+
+  div[role='button'] {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 10px !important;
+  }
+}
+.chooseEventButton {
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  background-color: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chooseEventButton:hover {
+  background-color: #004dcc;
+}
+.noEventBlock {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.noEventMessage {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.hintText {
+  font-size: 0.95rem;
+  color: #92400e;
+  margin-bottom: 1rem;
+}
+
+
