@@ -21,8 +21,9 @@ app.use(cors({
 
 app.use(express.json());
 
+// Подключение роутов с правильными префиксами
 app.use('/api/events', eventRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);       // <--- здесь ожидается /register и /login
 app.use('/api/bookings', bookingRoutes);
 
 app.use((req, res, next) => {
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
     res.show('home.html');
 });
 
+// Обработка 404 и ошибок
 app.use(notFound);
 app.use(errorHandler);
 
