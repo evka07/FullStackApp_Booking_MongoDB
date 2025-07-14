@@ -15,9 +15,10 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',  // фронтенд обычно на 3000
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
     credentials: true,
 }));
+
 
 app.use(express.json());
 
