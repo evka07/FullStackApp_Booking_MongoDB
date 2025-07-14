@@ -54,7 +54,7 @@ export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegist
                 <h2>Log In</h2>
 
                 <form onSubmit={handleSubmit}>
-                    <input
+                    <input className={styles.modalInput}
                         type="email"
                         name="email"
                         placeholder="Email"
@@ -62,7 +62,7 @@ export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegist
                         onChange={handleChange}
                         required
                     />
-                    <input
+                    <input className={styles.modalInput}
                         type="password"
                         name="password"
                         placeholder="Password"

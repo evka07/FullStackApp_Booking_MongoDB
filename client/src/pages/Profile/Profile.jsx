@@ -1,28 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 import SeatRow from '../../components/SeatRow/SeatRow';
 import styles from './Profile.module.scss';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function Profile() {
-    const location = useLocation();
     const navigate = useNavigate();
-    const eventId = location.state?.eventId || localStorage.getItem('selectedEventId');
     const user = JSON.parse(localStorage.getItem('user'));
     const userName = user?.name;
     const userEmail = user?.email;
 
+    const today = () => new Date();
+    const [date, setDate] = useState(today());
     const [bookedSeats, setBookedSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [date, setDate] = useState('2025-07-09');
+    const [allEvents, setAllEvents] = useState([]);
 
+    // Получение всех событий
+    useEffect(() => {
+        async function listAllEvents() {
+            try {
+                const response = await axiosInstance.get('/api/events');
+                setAllEvents(response.data);
+            } catch (error) {
+                console.error('Error loading events:', error);
+            }
+        }
+        listAllEvents();
+    }, []);
+
+    // Найти событие на выбранную дату
+    const eventToday = allEvents.find(event => {
+        const eventDate = new Date(event.date).toISOString().split('T')[0];
+        const selectedDate = date.toISOString().split('T')[0];
+        return eventDate === selectedDate;
+    });
+
+    // Получить забронированные места
     useEffect(() => {
         async function fetchBookedSeats() {
-            if (!eventId) return;
+            if (!eventToday) return;
 
             try {
+                const formattedDate = date.toISOString().split('T')[0];
                 const response = await axiosInstance.get('/api/bookings', {
-                    params: { date, event: eventId },
+                    params: { date: formattedDate, event: eventToday._id },
                 });
                 setBookedSeats(response.data.map(b => `${b.row}-${b.seat}`));
                 setSelectedSeats([]);
@@ -36,7 +60,7 @@ export default function Profile() {
         }
 
         fetchBookedSeats();
-    }, [date, eventId, navigate]);
+    }, [date, eventToday, navigate]);
 
     const handleToggleSeat = (row, seat) => {
         const seatId = `${row}-${seat}`;
@@ -48,19 +72,20 @@ export default function Profile() {
     };
 
     const handleBuy = async () => {
-        if (!eventId) {
-            alert('Please select an event first.');
+        if (!eventToday) {
+            alert('Please select a date with an event.');
             return;
         }
 
         try {
+            const formattedDate = date.toISOString().split('T')[0];
             for (const seatId of selectedSeats) {
                 const [row, seat] = seatId.split('-').map(Number);
                 await axiosInstance.post('/api/bookings', {
                     row,
                     seat,
-                    date,
-                    event: eventId,
+                    date: formattedDate,
+                    event: eventToday._id,
                 });
             }
 
@@ -68,7 +93,7 @@ export default function Profile() {
             setSelectedSeats([]);
 
             const response = await axiosInstance.get('/api/bookings', {
-                params: { date, event: eventId },
+                params: { date: formattedDate, event: eventToday._id },
             });
             setBookedSeats(response.data.map(b => `${b.row}-${b.seat}`));
         } catch (error) {
@@ -105,33 +130,20 @@ export default function Profile() {
                     Logout
                 </button>
 
-                {!eventId ? (
-                    <div className={styles.noEventBlock}>
-                        <p className={styles.noEventMessage}>
-                            ⚠️ No event selected.
-                        </p>
-                        <p className={styles.hintText}>
-                            Please choose an event to book your seats.
-                        </p>
-                        <button
-                            className={styles.chooseEventButton}
-                            onClick={() => navigate('/')}
-                        >
-                            🎟️ Choose Event
-                        </button>
-                    </div>
-                ) : (
-                    <>
-                        <label htmlFor="booking-date">Select date:</label>
-                        <input
-                            id="booking-date"
-                            type="date"
-                            value={date}
-                            onChange={e => setDate(e.target.value)}
-                            min="2025-01-01"
-                            max="2025-12-31"
-                        />
+                <label htmlFor="booking-date">Select date:</label>
+                <DatePicker
+                    id="booking-date"
+                    selected={date}
+                    onChange={(newDate) => setDate(newDate)}
+                    dateFormat="yyyy-MM-dd"
+                    minDate={new Date('2025-01-01')}
+                    maxDate={new Date('2025-12-31')}
+                    includeDates={allEvents.map(e => new Date(e.date))}
+                    className={styles.bookingDate}
+                />
 
+                {eventToday ? (
+                    <>
                         <div className={styles.seatingSection}>
                             <div className={styles.stage}>Stage</div>
 
@@ -163,6 +175,10 @@ export default function Profile() {
                             Buy {selectedSeats.length} seat(s)
                         </button>
                     </>
+                ) : (
+                    <p className={styles.noEventMessage}>
+                        📅 There are no events on this date.
+                    </p>
                 )}
             </div>
         </main>

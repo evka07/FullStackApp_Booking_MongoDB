@@ -8,7 +8,7 @@
 .profileContainer {
   max-width: 960px;
   margin: 0 auto;
-  background: white;
+  background: #fff;
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -32,7 +32,7 @@
   margin-bottom: 2rem;
   padding: 0.5rem 1.2rem;
   background-color: #6cb4ee;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -44,24 +44,27 @@
   background-color: #009cde;
 }
 
-label[for="booking-date"] {
+label[for='booking-date'] {
   font-size: 1rem;
   font-weight: 500;
-  color: #333;
+  color: #000;
   display: block;
   margin: 0 auto 0.5rem;
 }
 
-#booking-date {
-  padding: 0.4rem 0.8rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.bookingDate {
+  width: 100%;
+  max-width: 280px;
+  padding: 0.6rem 1rem;
+  font-size: 1.1rem;
+  border: 1px solid #000;
+  border-radius: 8px;
   margin-bottom: 1.5rem;
   transition: border 0.3s ease;
+  text-align: center;
 }
 
-#booking-date:focus {
+.bookingDate:focus {
   border-color: #0066ff;
   outline: none;
 }
@@ -79,7 +82,7 @@ label[for="booking-date"] {
   width: 60%;
   padding: 0.8rem;
   background-color: #333;
-  color: white;
+  color: #fff;
   font-weight: bold;
   border-radius: 12px;
   user-select: none;
@@ -99,7 +102,7 @@ label[for="booking-date"] {
   margin-top: 12px;
   padding: 0.7rem 1.5rem;
   background-color: #007b00;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -117,7 +120,71 @@ label[for="booking-date"] {
   background-color: #005c00;
 }
 
-/* Адаптивность */
+.chooseEventButton {
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  background-color: #0066ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chooseEventButton:hover {
+  background-color: #004dcc;
+}
+
+.noEventBlock {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.noEventMessage {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.hintText {
+  font-size: 0.95rem;
+  color: #92400e;
+  margin-bottom: 1rem;
+}
+
+/* react-datepicker override */
+.react-datepicker-wrapper {
+  display: inline-block;
+  width: auto;
+}
+
+.react-datepicker__input-container input {
+  font-size: 1.1rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #000;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+  max-width: 280px;
+}
+
+.react-datepicker__day--selected {
+  background-color: #0066ff;
+  color: #fff;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #e0e0e0;
+  color: #000;
+}
+
+/* Responsive */
 @media (max-width: 600px) {
   .profileContainer {
     padding: 1rem;
@@ -142,47 +209,18 @@ label[for="booking-date"] {
     font-size: 0.95rem;
   }
 
+  .bookingDate {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .react-datepicker__input-container input {
+    font-size: 1rem;
+  }
+
   div[role='button'] {
     width: 30px !important;
     height: 30px !important;
     font-size: 10px !important;
   }
 }
-.chooseEventButton {
-  margin-top: 1rem;
-  padding: 0.6rem 1.4rem;
-  font-size: 1rem;
-  background-color: #0066ff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.chooseEventButton:hover {
-  background-color: #004dcc;
-}
-.noEventBlock {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: #fef3c7;
-  border: 1px solid #fcd34d;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.noEventMessage {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #92400e;
-  margin-bottom: 0.5rem;
-}
-
-.hintText {
-  font-size: 0.95rem;
-  color: #92400e;
-  margin-bottom: 1rem;
-}
-
-
