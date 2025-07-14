@@ -8,9 +8,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 export default function Profile() {
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('user'));
-    const userName = user?.name;
-    const userEmail = user?.email;
+
+    // user теперь состояние, инициализируется из localStorage один раз
+    const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
 
     const today = () => new Date();
     const [date, setDate] = useState(today());
@@ -54,6 +54,7 @@ export default function Profile() {
                 console.error('Error loading booked seats:', error);
                 if (error.response?.status === 401) {
                     alert('Please log in to view bookings.');
+                    setUser(null);      // <--- сбрасываем user при 401
                     navigate('/');
                 }
             }
@@ -100,6 +101,7 @@ export default function Profile() {
             console.error('Booking error:', error);
             if (error.response?.status === 401) {
                 alert('Please log in to book seats.');
+                setUser(null);   // <--- сброс user при 401
                 navigate('/');
             } else {
                 alert('Failed to book seats. Please try again.');
@@ -111,20 +113,29 @@ export default function Profile() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('selectedEventId');
+        setUser(null); // <--- сброс состояния
         navigate('/');
     };
+
+    if (!user) {
+        return (
+            <main className={styles.main}>
+                <div className={styles.profileContainer}>
+                    <p className={styles.noEventMessage}>Please, login or register first.</p>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className={styles.main}>
             <div className={styles.profileContainer}>
                 <h1 className={styles.welcomeHeader}>
-                    Welcome{userName ? `, ${userName}` : ''} 👋
+                    Welcome, {user.name} 👋
                 </h1>
-                {userEmail && (
-                    <p className={styles.userEmail}>
-                        Logged in as <strong>{userEmail}</strong>
-                    </p>
-                )}
+                <p className={styles.userEmail}>
+                    Logged in as <strong>{user.email}</strong>
+                </p>
 
                 <button className={styles.logoutButton} onClick={handleLogout}>
                     Logout
@@ -134,7 +145,7 @@ export default function Profile() {
                 <DatePicker
                     id="booking-date"
                     selected={date}
-                    onChange={(newDate) => setDate(newDate)}
+                    onChange={setDate}
                     dateFormat="yyyy-MM-dd"
                     minDate={new Date('2025-01-01')}
                     maxDate={new Date('2025-12-31')}

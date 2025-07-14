@@ -13,6 +13,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
+console.log('CLIENT_URL for CORS:', process.env.CLIENT_URL);
 
 app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
