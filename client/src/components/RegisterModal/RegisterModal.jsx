@@ -56,7 +56,8 @@ export default function RegisterModal({
     };
 
     const handleGoogleLogin = () => {
-        window.open(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/auth/google`, '_self');
+        window.location.href = `${process.env.REACT_APP_API_URL
+        || 'http://localhost:5001'}/auth/google`;
     };
 
     return (
