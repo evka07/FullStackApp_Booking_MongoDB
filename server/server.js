@@ -6,6 +6,7 @@ const path = require('node:path');
 const dotenv = require('dotenv');
 const session = require('express-session');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
@@ -56,11 +57,16 @@ app.get('/auth/google', passport.authenticate('google', {
 app.get('/auth/google/callback',
     passport.authenticate('google', {
         failureRedirect: '/',
-        session: true,
+        session: false, // ❗️ отключаем сессию — используем JWT
     }),
     (req, res) => {
-        // Успешная авторизация — можно перенаправить на frontend
-        res.redirect(`${CLIENT_URL}/profile`);
+        // Генерация JWT
+        const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
+            expiresIn: '7d',
+        });
+
+        // Перенаправление на фронтенд с токеном
+        res.redirect(`${CLIENT_URL}/profile?token=${token}`);
     }
 );
 

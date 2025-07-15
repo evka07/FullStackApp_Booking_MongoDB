@@ -6,27 +6,56 @@ import SeatRow from '../../components/SeatRow/SeatRow';
 import styles from './Profile.module.scss';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { logout } from '../../redux/userSlice';
+import { logout, loginSuccess } from '../../redux/userSlice';
 
 export default function Profile() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
 
-    // Получаем пользователя из Redux
     const user = useSelector(state => state.user.userInfo?.user);
-
-    // Получаем переданный eventId из location.state, если есть
     const passedEventId = location.state?.eventId || null;
 
-    // Состояния
     const [selectedEventId, setSelectedEventId] = useState(passedEventId);
     const [date, setDate] = useState(null);
     const [bookedSeats, setBookedSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [allEvents, setAllEvents] = useState([]);
 
-    // Загрузка событий при монтировании
+    // 🟢 Google login handler: extract token from URL
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const token = queryParams.get('token');
+
+        if (token) {
+            axiosInstance
+                .get('/api/users/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then(res => {
+                    const userInfo = {
+                        user: {
+                            _id: res.data._id,
+                            name: res.data.name,
+                            email: res.data.email,
+                        },
+                        token,
+                    };
+
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+                    dispatch(loginSuccess(userInfo));
+
+                    // Clean URL
+                    navigate('/profile', { replace: true });
+                })
+                .catch(err => {
+                    console.error('Google login error:', err);
+                });
+        }
+    }, [dispatch, navigate]);
+
     useEffect(() => {
         async function loadEvents() {
             try {
@@ -39,13 +68,11 @@ export default function Profile() {
         loadEvents();
     }, []);
 
-    // Вспомогательная функция для сравнения дат по дню, месяцу и году
     const isSameDay = (d1, d2) =>
         d1.getFullYear() === d2.getFullYear() &&
         d1.getMonth() === d2.getMonth() &&
         d1.getDate() === d2.getDate();
 
-    // Когда меняется выбранный eventId — обновляем дату
     useEffect(() => {
         if (!selectedEventId || allEvents.length === 0) return;
 
@@ -58,10 +85,8 @@ export default function Profile() {
         }
     }, [selectedEventId, allEvents]);
 
-    // При смене даты ищем событие с этой датой и меняем selectedEventId
     const handleDateChange = (newDate) => {
         setDate(newDate);
-
         if (!newDate) {
             setSelectedEventId(null);
             return;
@@ -71,10 +96,8 @@ export default function Profile() {
         setSelectedEventId(matchedEvent ? matchedEvent._id : null);
     };
 
-    // Получаем текущее выбранное событие
     const eventToday = allEvents.find(event => event._id === selectedEventId);
 
-    // Загружаем забронированные места при изменении события или даты
     useEffect(() => {
         if (!eventToday || !date) {
             setBookedSeats([]);
@@ -103,17 +126,15 @@ export default function Profile() {
         fetchBookedSeats();
     }, [date, eventToday, dispatch, navigate]);
 
-    // Переключение выбора места
     const handleToggleSeat = (row, seat) => {
         const seatId = `${row}-${seat}`;
-        setSelectedSeats(prevSelected =>
-            prevSelected.includes(seatId)
-                ? prevSelected.filter(s => s !== seatId)
-                : [...prevSelected, seatId]
+        setSelectedSeats(prev =>
+            prev.includes(seatId)
+                ? prev.filter(s => s !== seatId)
+                : [...prev, seatId]
         );
     };
 
-    // Покупка выбранных мест
     const handleBuy = async () => {
         if (!eventToday) {
             alert('Please select a date with an event.');
@@ -154,17 +175,14 @@ export default function Profile() {
         }
     };
 
-    // Выход из системы
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userInfo');
         localStorage.removeItem('selectedEventId');
-
         dispatch(logout());
         navigate('/');
     };
 
-    // Если не авторизован - просим войти
     if (!user) {
         return (
             <main className={styles.main}>
