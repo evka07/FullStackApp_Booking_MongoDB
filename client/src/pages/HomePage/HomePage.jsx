@@ -1,21 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
-
 import BannerVideo from "../../components/BannerVideo/BannerVideo";
 import QRCodeComponent from "../../components/QRcode/QRСodeComponent";
 import PaymentIcons from "../../components/PaymentIcons/PaymentIcons";
-import LoginModal from "../../components/LoginModal/LoginModal";
-import RegisterModal from "../../components/RegisterModal/RegisterModal";
 
 import styles from "./HomePage.module.scss";
 
-export default function HomePage() {
+export default function HomePage({ onOpenLogin, navigate }) {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
-    const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchEvents() {
@@ -32,15 +25,15 @@ export default function HomePage() {
     }, []);
 
     const handleBookNowClick = (eventId) => {
-        const token = localStorage.getItem('token');
+        const userInfo = localStorage.getItem('userInfo');
+        const token = userInfo ? JSON.parse(userInfo).token : null;
 
-        // Сохраняем выбранный eventId, чтобы использовать при логине или регистрации
         localStorage.setItem('selectedEventId', eventId);
 
         if (token) {
             navigate('/profile', { state: { eventId } });
         } else {
-            setIsLoginOpen(true);
+            onOpenLogin();
         }
     };
 
@@ -138,26 +131,6 @@ export default function HomePage() {
 
                 </div>
             </section>
-
-            <LoginModal
-                isOpen={isLoginOpen}
-                onClose={() => setIsLoginOpen(false)}
-                onSwitchToRegister={() => {
-                    setIsLoginOpen(false);
-                    setIsRegisterOpen(true);
-                }}
-                navigate={navigate}
-            />
-
-            <RegisterModal
-                isOpen={isRegisterOpen}
-                onClose={() => setIsRegisterOpen(false)}
-                onSwitchToLogin={() => {
-                    setIsRegisterOpen(false);
-                    setIsLoginOpen(true);
-                }}
-                navigate={navigate}
-            />
         </div>
     );
 }

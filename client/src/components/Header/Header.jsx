@@ -1,30 +1,40 @@
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.jsx';
 import RegisterModal from '../RegisterModal/RegisterModal.jsx';
 import LoginModal from '../LoginModal/LoginModal.jsx';
+
 import styles from './Header.module.scss';
+import { loginSuccess, logout } from '../../redux/userSlice';
 
-const Header = () => {
-    const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
-    const navigate = useNavigate();
+const Header = ({
+                    isLoginOpen,
+                    setIsLoginOpen,
+                    isRegisterOpen,
+                    setIsRegisterOpen,
+                    onLoginSuccess,
+                    navigate,
+                }) => {
+    const dispatch = useDispatch();
+    const userInfo = useSelector((state) => state.user.userInfo);
+    const token = userInfo?.token || null;
+    const userName = userInfo?.user?.name || null;
 
-    const openRegisterModal = () => setIsRegisterOpen(true);
-    const closeRegisterModal = () => setIsRegisterOpen(false);
-
-    const openLoginModal = () => setIsLoginOpen(true);
-    const closeLoginModal = () => setIsLoginOpen(false);
-
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
-    const userName = user?.name;
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        dispatch(logout());
         localStorage.removeItem('selectedEventId');
         navigate('/');
+    };
+
+    const openRegisterModal = () => {
+        setIsLoginOpen(false);
+        setIsRegisterOpen(true);
+    };
+
+    const openLoginModal = () => {
+        setIsRegisterOpen(false);
+        setIsLoginOpen(true);
     };
 
     return (
@@ -58,13 +68,17 @@ const Header = () => {
                 <>
                     <RegisterModal
                         isOpen={isRegisterOpen}
-                        onClose={closeRegisterModal}
+                        onClose={() => setIsRegisterOpen(false)}
                         navigate={navigate}
+                        onLoginSuccess={onLoginSuccess}
+                        onSwitchToLogin={openLoginModal}
                     />
                     <LoginModal
                         isOpen={isLoginOpen}
-                        onClose={closeLoginModal}
+                        onClose={() => setIsLoginOpen(false)}
                         navigate={navigate}
+                        onLoginSuccess={onLoginSuccess}
+                        onSwitchToRegister={openRegisterModal}
                     />
                 </>
             )}

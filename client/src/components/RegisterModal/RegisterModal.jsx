@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import axios from 'axios';
 import styles from './RegisterModal.module.scss';
+import googleLogo from '../../assets/google-logo.png'; // добавь логотип
 
-export default function RegisterModal({ isOpen, onClose, navigate, onSwitchToLogin }) {
+export default function RegisterModal({
+                                          isOpen,
+                                          onClose,
+                                          navigate,
+                                          onSwitchToLogin,
+                                          onLoginSuccess,
+                                      }) {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        password: ''
+        password: '',
     });
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -25,12 +32,17 @@ export default function RegisterModal({ isOpen, onClose, navigate, onSwitchToLog
         try {
             const response = await axios.post('/api/users/register', formData);
 
-            // Сохраняем весь объект пользователя
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data));
+            const userInfo = {
+                user: {
+                    _id: response.data._id,
+                    name: response.data.name,
+                    email: response.data.email,
+                },
+                token: response.data.token,
+            };
 
-            console.log('Registration successful:', response.data);
-
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            onLoginSuccess && onLoginSuccess(userInfo);
             setLoading(false);
             onClose();
 
@@ -43,11 +55,16 @@ export default function RegisterModal({ isOpen, onClose, navigate, onSwitchToLog
         }
     };
 
+    const handleGoogleLogin = () => {
+        window.open(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/auth/google`, '_self');
+    };
+
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
                 <button onClick={onClose} className={styles.closeButton}>×</button>
                 <h2>Register</h2>
+
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -78,22 +95,26 @@ export default function RegisterModal({ isOpen, onClose, navigate, onSwitchToLog
                     </button>
                     {error && <p className={styles.errorMessage}>{error}</p>}
                 </form>
-                <p style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
+
+                <div className={styles.divider}>or</div>
+
+                <button className={styles.googleButton} onClick={handleGoogleLogin}>
+                    <img
+                        src="https://developers.google.com/identity/images/g-logo.png"
+                        alt="Google logo"
+                        className={styles.googleLogo} />
+                    Continue with Google
+                </button>
+
+                <p className={styles.switchText}>
                     Already have an account?{' '}
                     <button
                         onClick={() => {
                             onClose();
-                            onSwitchToLogin();
+                            onSwitchToLogin && onSwitchToLogin();
                         }}
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#0066ff',
-                            cursor: 'pointer',
-                            textDecoration: 'underline',
-                            padding: 0,
-                            fontSize: '0.9rem',
-                        }}
+                        className={styles.switchButton}
+                        type="button"
                     >
                         Log in here
                     </button>

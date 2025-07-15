@@ -1,8 +1,14 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosInstance';
 import styles from './LoginModal.module.scss';
 
-export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegister }) {
+export default function LoginModal({
+                                       isOpen,
+                                       onClose,
+                                       navigate,
+                                       onSwitchToRegister,
+                                       onLoginSuccess,
+                                   }) {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -10,7 +16,7 @@ export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegist
     if (!isOpen) return null;
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const handleSubmit = async (e) => {
@@ -19,16 +25,23 @@ export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegist
         setLoading(true);
 
         try {
-            const response = await axios.post('/api/users/login', formData);
+            const response = await axiosInstance.post('/api/users/login', formData);
 
-            // Сохраняем токен и объект пользователя (с именем и email)
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data));
+            const userInfo = {
+                user: {
+                    _id: response.data._id,
+                    name: response.data.name,
+                    email: response.data.email,
+                },
+                token: response.data.token,
+            };
 
-            // fallback: если событие не выбрано, получаем первое
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            onLoginSuccess(userInfo);
+
             let selectedEventId = localStorage.getItem('selectedEventId');
             if (!selectedEventId) {
-                const eventsResponse = await axios.get('/api/events');
+                const eventsResponse = await axiosInstance.get('/api/events');
                 if (eventsResponse.data?.length > 0) {
                     selectedEventId = eventsResponse.data[0]._id;
                     localStorage.setItem('selectedEventId', selectedEventId);
@@ -37,8 +50,6 @@ export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegist
 
             setLoading(false);
             onClose();
-
-            // Переходим в профиль с выбранным eventId
             navigate('/profile', { state: { eventId: selectedEventId } });
         } catch (err) {
             setLoading(false);
@@ -47,28 +58,38 @@ export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegist
         }
     };
 
+    const handleGoogleLogin = () => {
+        window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/auth/google`;
+    };
+
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-                <button onClick={onClose} className={styles.closeButton}>×</button>
+                <button onClick={onClose} className={styles.closeButton} aria-label="Close modal">
+                    ×
+                </button>
                 <h2>Log In</h2>
 
                 <form onSubmit={handleSubmit}>
-                    <input className={styles.modalInput}
+                    <input
+                        className={styles.modalInput}
                         type="email"
                         name="email"
                         placeholder="Email"
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        autoComplete="email"
                     />
-                    <input className={styles.modalInput}
+                    <input
+                        className={styles.modalInput}
                         type="password"
                         name="password"
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleChange}
                         required
+                        autoComplete="current-password"
                     />
                     <button type="submit" disabled={loading}>
                         {loading ? 'Logging in...' : 'Log In'}
@@ -76,19 +97,30 @@ export default function LoginModal({ isOpen, onClose, navigate, onSwitchToRegist
                     {error && <p className={styles.errorMessage}>{error}</p>}
                 </form>
 
+                <div className={styles.divider}>or</div>
+
+                <button className={styles.googleButton} onClick={handleGoogleLogin}>
+                    <img
+                        src="https://developers.google.com/identity/images/g-logo.png"
+                        alt="Google logo"
+                        className={styles.googleLogo}
+                    />
+                    Continue with Google
+                </button>
+
                 <p className={styles.switchText}>
                     Don't have an account?{' '}
                     <button
                         onClick={() => {
                             onClose();
-                            onSwitchToRegister();
+                            onSwitchToRegister && onSwitchToRegister();
                         }}
                         className={styles.switchButton}
+                        type="button"
                     >
                         Register here
                     </button>
                 </p>
-
             </div>
         </div>
     );

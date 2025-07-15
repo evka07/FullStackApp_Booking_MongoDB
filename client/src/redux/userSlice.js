@@ -1,9 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+function parseJSONSafe(value) {
+    try {
+        if (!value || value === 'undefined' || value === 'null') return null;
+        return JSON.parse(value);
+    } catch {
+        return null;
+    }
+}
+
 const initialState = {
-    userInfo: localStorage.getItem('userInfo')
-        ? JSON.parse(localStorage.getItem('userInfo'))
-        : null,
+    userInfo: parseJSONSafe(localStorage.getItem('userInfo')), // теперь внутри: { user, token }
 };
 
 const userSlice = createSlice({
@@ -11,8 +18,12 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         loginSuccess: (state, action) => {
-            state.userInfo = action.payload;
-            localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            const userInfo = {
+                user: action.payload.user,
+                token: action.payload.token,
+            };
+            state.userInfo = userInfo;
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
         },
         logout: (state) => {
             state.userInfo = null;
