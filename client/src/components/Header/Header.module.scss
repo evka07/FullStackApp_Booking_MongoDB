@@ -1,25 +1,36 @@
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
+  align-items: center;
+
   height: 80px;
-  border-bottom: 1px solid #ccc;
   background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  position: relative; // для бургер-позиционирования
+
+  @media (max-width: 780px) {
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    padding: 1rem;
+  }
 }
 
-.StyledRizLogoWrapper {
-  width: 112px;
-  height: 40px;
-  margin-right: 1.5rem;
-  flex-shrink: 0;
+.logoAndTitle {
+  display: flex;
+  align-items: center;
+  margin-left: 6rem;
+
+  @media (max-width: 780px) {
+    margin-left: 1.5rem;
+  }
 }
+
 
 .titleWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-right: auto;
 }
 
 .cityName {
@@ -37,25 +48,4 @@
   color: #555;
 }
 
-.navbar {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
 
-/* Адаптив для узких экранов */
-@media (max-width: 600px) {
-  .header {
-    flex-direction: column;
-    height: auto;
-    padding: 1rem;
-  }
-  .titleWrapper {
-    margin: 0 0 0.8rem 0;
-  }
-  .navbar {
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-}

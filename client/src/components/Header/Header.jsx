@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.jsx';
 import RegisterModal from '../RegisterModal/RegisterModal.jsx';
 import LoginModal from '../LoginModal/LoginModal.jsx';
-
+import { logout } from '../../redux/userSlice';
 import styles from './Header.module.scss';
-import { loginSuccess, logout } from '../../redux/userSlice';
 
 const Header = ({
                     isLoginOpen,
@@ -13,13 +12,12 @@ const Header = ({
                     isRegisterOpen,
                     setIsRegisterOpen,
                     onLoginSuccess,
-                    navigate,
                 }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const userInfo = useSelector((state) => state.user.userInfo);
     const token = userInfo?.token || null;
     const userName = userInfo?.user?.name || null;
-
 
     const handleLogout = () => {
         dispatch(logout());
@@ -40,20 +38,14 @@ const Header = ({
     return (
         <>
             <header className={styles.header}>
-                <div className={styles.StyledRizLogoWrapper}>
-                    <canvas
-                        width="224"
-                        height="80"
-                        style={{ verticalAlign: 'top', width: '112px', height: '40px' }}
-                    />
+                <div className={styles.logoAndTitle}>
+                    <div className={styles.titleWrapper}>
+                        <p className={styles.cityName}>KRAKOW</p>
+                        <p className={styles.name}>TICKETS</p>
+                    </div>
                 </div>
 
-                <div className={styles.titleWrapper}>
-                    <p className={styles.cityName}>KRAKOW</p>
-                    <p className={styles.name}>TICKETS</p>
-                </div>
-
-                <nav className={styles.navbar}>
+                <div className={styles.navWrapper}>
                     <Navbar
                         onRegisterClick={openRegisterModal}
                         onLoginClick={openLoginModal}
@@ -61,7 +53,7 @@ const Header = ({
                         userName={userName}
                         onLogout={handleLogout}
                     />
-                </nav>
+                </div>
             </header>
 
             {!token && (

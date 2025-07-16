@@ -205,7 +205,6 @@
 
   .paymentColumn {
     ul.paymentList {
-      display: flex;
       flex-wrap: wrap;
       gap: 0.6rem;
       padding-left: 0;
@@ -231,4 +230,136 @@
     }
   }
 }
+
+@media (max-width: 920px) {
+  .downloadSection {
+    padding: 1.5rem 1rem;
+
+    .downloadWrapper {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    h2, h3 {
+      font-size: 1.4rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+    }
+
+    .logoRow h2 {
+      font-size: 1.5rem;
+    }
+
+    .paymentColumn h3 {
+      justify-content: center;
+      display: flex;
+    }
+    .paymentColumn ul{
+      display: flex;
+      justify-content: center;
+    }
+    .paymentColumn ul.paymentList li {
+      font-size: 0.75rem;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
+
+@media (max-width: 780px) {
+  .videoBanner {
+    height: 20rem;
+    margin: 1rem 0;
+  }
+
+  .eventsGrid {
+    padding: 1rem;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .eventCard {
+    padding: 1rem;
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    button {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  .thingsSection {
+    padding: 2rem 1rem;
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .categories {
+      grid-template-columns: 1fr;
+
+      div {
+        padding: 1.5rem;
+
+        h3 {
+          font-size: 1.2rem;
+        }
+
+        ul li {
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+
+  .downloadSection {
+    padding: 1.5rem 1rem;
+
+    .downloadWrapper {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    h2, h3 {
+      font-size: 1.4rem;
+    }
+
+    .logoRow h2 {
+      font-size: 1.5rem;
+    }
+
+    .paymentColumn ul.paymentList li {
+      font-size: 0.75rem;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .videoBanner {
+    height: 15rem;
+    margin: 1rem 0;
+  }
+}
+
 
